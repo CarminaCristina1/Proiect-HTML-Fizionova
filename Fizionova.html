@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Harta -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <title>Fizionova</title>
+
+    <style>
+        #map {
+            height: 400px; 
+            width: 100%; 
+        }
+
+
+
+        body {
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            background-color: white; 
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            align-items:flex-end;
+            justify-content: space-between; 
+            margin-bottom: 40px; 
+            justify-content: center;
+            align-items: center;
+        }
+        .menu {
+            display:flex;
+            flex-wrap: wrap;
+        }
+        .menu-item {
+            position: relative;
+            
+            z-index: 1000;
+        }
+        .menu-item > a {
+            text-decoration: none;
+            color: rgb(112, 109, 109);
+            padding: 10px;
+            display: flex;
+            position: relative;
+        }
+        .menu-item > a:hover {
+            background-color: #e0e0e0;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 44px;
+            left: 0px;
+            flex-direction: column;
+            background-color: #329cff;
+        }
+        .submenu a {
+            padding: 10px;
+            color:white;
+        }
+        .submenu a:hover {
+            background-color: rgb(25, 0, 255);
+        }
+        .menu-item:hover .submenu {
+            display: flex;
+        }
+
+
+        
+        .contact-info {
+            display:flex;
+            align-items: center;
+            font-size: 28px; 
+            z-index: 1000;
+            background-color: #f5f5f5;
+            opacity: 70%;
+        }
+        .contact-info .icon {
+            display:contents;
+            align-items: center;
+            z-index: 1000;
+        }
+        .contact-info .icon:not(:last-child)::after {
+            content: '|';
+            margin-left: 40px;
+            margin-right: 40px;
+            color: #000;
+            z-index: 1000;
+        }
+
+
+
+        .button-container {
+            margin-left: auto; 
+        }
+        .programeaza-button {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 25px;
+            margin-left: 20px; 
+        }
+        .programeaza-button:hover {
+            background-color: #0b7dda; 
+        }
+
+
+
+
+
+
+        .background {
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            margin-top: 100px;
+            height: 40vh;
+            display: flex;
+            justify-content: center;
+            position: left;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .content {
+            position: absolute;
+            text-align: center;
+            margin-top: 80px;
+        }
+        .content button {
+            padding: 10px 20px;
+            background-color: #f32121;
+            color: white;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 25px;
+            margin-left: 20px; 
+        }
+        .content button:hover {
+            background-color: #bd0909; 
+        }
+
+        
+
+        .container {
+            display: flex;
+            margin-left: 0px;
+            margin-right: 50px;
+            margin-top: 50px;
+            padding-right: 40px;
+            text-align:justify;
+        }
+        .co {
+            display: flex;
+            flex-wrap:wrap;
+            margin-bottom: 20px;
+            max-width: 25%;
+            padding-right: 20px;
+            margin-left: 20px;
+        }
+        .co h2 {
+            margin-bottom: 20px;
+            
+        }
+        .image-section {
+            display: flex;
+            flex-direction: column;
+            align-items: auto;
+            margin-left: 50px;
+        }
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+        }
+        .image-section h3 {
+            margin-top: 60px;
+        }
+        .image-section p {
+            text-align: center;
+        }
+
+
+
+        .backgrounddoi {
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            margin-top: 350px;
+            height: 40vh;
+            display: flex;
+            justify-content: center;
+            position: left;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .imagetext {
+            position: absolute;
+            display: flex;
+            flex-direction:row;
+            justify-content: space-between;
+            margin-top: 140px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 50px;
+            margin-right: 40px;
+            color: #f5f5f5;
+        }
+
+
+
+        .containerdoi {
+            display: flex;
+            margin-left: 0px;
+            margin-right: 50px;
+            margin-top: 80px;
+        }
+        h4 {
+            margin-top: -10px;
+            color:#2125f3;
+            font-weight: 300;
+            font-size: medium;
+        }
+        .doctori {
+            display: flex;
+            flex-direction: column;
+            width: auto;
+            border-radius: 20px;
+            padding: 40px;
+            box-sizing: content-box;
+            align-items: auto;
+            text-align:justify;
+        }
+
+
+        .retele_sociale {
+            background-color: #918c8c ;
+            border-top: 20px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .icon {
+            width:  10px;
+            height: 10px;
+            display: inline block;
+            justify-content: baseline;
+        }
+
+
+
+        .fundalfinal {
+            display:flex;
+            align-items: center;
+            font-size: 28px; 
+            z-index: 1000;
+            background-color: rgb(97, 95, 95);
+            margin-top: 30px;
+            color:#ffffff;
+        }
+        .fundalfinal .icon {
+            display:contents;
+            align-items:center;
+            z-index: 1000;
+            
+        }
+        .fundalfinal .icon:not(:last-child)::after {
+            content: '|';
+            margin-left: 40px;
+            margin-right: 40px;
+            color: #ffffff;
+            z-index: 1000;
+        }
+
+
+
+        .textfinal{
+            display:flex;
+            flex-direction:row;
+            align-items:top;
+            color:#ffffff;
+            background-color: rgb(97, 95, 95);
+            
+        }
+        .textfinal .text{
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-top: 20px;
+            padding-right: 200px;
+            margin-left: 25px;
+        }
+        .textfinal .h1{
+            text-size-adjust: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="C:\Users\Reea\Desktop\Fizionova\fontawesome-free-6.5.2-web/css/all.min.css">
+
+    <div class="header">
+        <img src="C:\Users\Reea\Desktop\Fizionova\Fizionova.png" alt="Logo" style="height: 130px; margin-right:30px;">
+
+        <div class="menu">
+            <div class="menu-item">
+                <a href="#">Despre noi</a>
+                <div class="submenu">
+                    <a href="#">Prezentare clinică</a>
+                    <a href="#">Echipa medicală</a>
+                    <a href="#">Circuitul pacientului</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Servicii</a>
+                <div class="submenu">
+                    <a href="#">Consultații medicale</a>
+                    <a href="#">Servicii medicale</a>
+                    <a href="#">Piscină</a>
+                    <a href="#">Sală</a>
+                    <a href="#">Teren exterior</a>
+                    <a href="#">Zonă de testare funcțională</a>
+                    <a href="#">Nutriție</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Tarife</a>
+                <div class="submenu">
+                    <a href="#">Detaliere abonamente</a>
+                    <a href="#">Tarife proceduri</a>
+                    <a href="#">Noutăți tarife/abonamente</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Patologii</a>
+                <div class="submenu">
+                    <a href="#">Zona cervicală</a>
+                    <a href="#">Umar</a>
+                    <a href="#">Spate</a>
+                    <a href="#">Cot/Antebrat/Mana</a>
+                    <a href="#">Sold</a>
+                    <a href="#">Coapsa</a>
+                    <a href="#">Genunchi</a>
+                    <a href="#">Gamba</a>
+                    <a href="#">Glezna/Picioare</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Blog</a>
+                <div class="submenu">
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">Contact</a>
+                <div class="submenu">   
+                </div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a href="#" class="programeaza-button">Programează-te</a>
+        </div>
+    </div>
+
+
+    <div class="contact-info">
+        <div class="icon">
+            <i class="fas fa-home"></i>
+            <div style="font-size: small; color: rgb(112, 109, 109);">
+                <p style="margin: 20px;">Ne găsiți la:</p>
+                <p style="margin: 20px;">Strada Kós Károly 3, Târgu Mureș</p>
+            </div>
+        </div>        
+        <div class="icon">
+            <i class="fas fa-phone-alt"></i>
+            <div style="font-size: small; color: rgb(112, 109, 109);">
+                <p style="margin:20px;">Telefon:</p>
+                <p style="margin: 20px;">0757467087</p>
+            </div>
+        </div>
+        <div class="icon">
+            <i class="fas fa-envelope"></i>
+            <div style="font-size: small; color: rgb(112, 109, 109);">
+                <p style="margin: 20px;">Email:</p>
+                <p style="margin: 20px;">office@fizionova.ro</p>
+            </div>
+        </div>
+        <div class="icon">
+            <i class="fas fa-clock"></i>
+            <div style="font-size: small; color: rgb(112, 109, 109);">
+                <p style="margin: 20px;">Program:</p>
+                <p style="margin: 20px;">Luni-Vineri 06-18</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="background">
+        <img src="C:\Users\Reea\Desktop\Fizionova\imagine.jpg" alt="Imagine de fundal" style="height: absolute ;margin-top: -220px; margin-left: 0;">
+        <div class="content">     
+            <p style="font-size:50px; color:white;">Regăsește-ți stilul de viață activ!</h1>
+            <hr>
+                <button>Programează-te</button>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="container">
+     
+        <div class="image-container">
+        <h2>Descopera serviciile premium de recuperare</h2>
+            <p>Terapii personalizate si tatamente inovatoare pentru recuperare medicala si imbunatatirea starii de sanatate. Atinge-ti potentialul maxim de vindecare si regaseste-ti un stil de viata activ.</p>  
+            <div class="content">
+                <button>Vezi toate serviciile</button>
+            </div>
+        </div>
+        <div class="image-container">
+            <img src="C:\Users\Reea\Desktop\Fizionova\crioterapie.jpg" alt="Crioterapia">
+            <h3>Crioterapia</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <div class="image-container">
+            <img src="C:\Users\Reea\Desktop\Fizionova\drenaj.jpg" alt="Drenaj limfatic">
+            <h3>Drenaj limfatic</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <div class="image-container">
+            <img src="C:\Users\Reea\Desktop\Fizionova\electroterapie.jpg" alt="Electroterapia">
+            <h3>Electroterapia</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+    </div>
+
+
+    <div class="backgrounddoi">
+        <img src="C:\Users\Reea\Desktop\Fizionova\fizioterapie.jpg" alt="Imagine de fundal" style="height: absolute ;margin-top: -220px; margin-left: 0;">
+        <div class="imagetext">  
+            <h1>Pacienti consultati 1500+</h1> 
+            <h1>Pacienti tratati 800+</h1>  
+            <h1>Infiltratii efectuate 400+</h1> 
+            </div>
+    </div>
+
+    
+    <div class="containerdoi">
+        <div class="doctori">
+            <img src="C:\Users\Reea\Desktop\Fizionova\Popa_Ioan.png" width="250">
+            <h3>Popa Ioan</h3>
+            <h4>Kinetoterapeut</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <div class="doctori">
+            <img src="C:\Users\Reea\Desktop\Fizionova\Raul_Radu.png" width="250">
+            <h3>Raul Radu</h3>
+            <h4>Ortoped</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <div class="doctori">
+            <img src="C:\Users\Reea\Desktop\Fizionova\Alex_Pop.png" width="250">
+            <h3>Alex Pop</h3>
+            <h4>Preparator fizic</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <div class="doctori">
+            <img src="C:\Users\Reea\Desktop\Fizionova\Andrei_Rus.png" width="250">
+            <h3>Andrei Rus</h3>
+            <h4>Kinetoterapeut</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+    </div>
+
+
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([46.5532, 24.5621], 50); 
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([46.55324238664594, 24.562165859489678]).addTo(map)
+            .bindPopup('Aceasta este locația noastră.<br> Fizionova.')
+            .openPopup();
+    </script>
+
+
+
+    <div class="fundalfinal">
+        <div class="icon">
+            <i class="fas fa-home"></i>
+            <div style="font-size: small; color: rgb(255, 255, 255);">
+                <p style="margin: 20px;">Ne găsiți la:</p>
+                <p style="margin: 20px;">Strada Kós Károly 3, Târgu Mureș</p>
+            </div>
+        </div>        
+        <div class="icon">
+            <i class="fas fa-phone-alt"></i>
+            <div style="font-size: small; color: rgb(255, 255, 255);">
+                <p style="margin:20px;">Telefon:</p>
+                <p style="margin: 20px;">0757 467 087</p>
+            </div>
+        </div>
+        <div class="icon">
+            <i class="fas fa-envelope"></i>
+            <div style="font-size: small; color: rgb(255, 255, 255);">
+                <p style="margin: 20px;">Email:</p>
+                <p style="margin: 20px;">fizionovaorto2013@gmail.com</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="textfinal">
+        <div class="text"> <div class="h1">Despre noi</div><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+        <div class="text"> <div class="h1">Navigatie</div><br>Despre noi<br>Servicii<br>Tarife<br>Patologii<br>>Blog<br>>Contact</div>
+        <div class="text"> <div class="h1">Serviciile noastre</div><br>Consultații medicale<br>Piscină<br>Sala<br>Teren exterior<br>Zona de testare funcțională</div>
+        <div class="text"> <div class="h1">Program</div><br>Luni 08:00-18:00<br>Marti 08:00-18:00<br>Miercuri 08:00-18:00<br>Joi 08:00-18:00<br>Vineri 08:00-18:00<br>Sambata 08:00-18:00<br>Duminica INCHIS</div>
+    </div>
+
+</body>
+</html>
